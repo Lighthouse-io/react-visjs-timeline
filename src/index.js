@@ -32,27 +32,6 @@ each(events, event => {
 
 export default class Timeline extends Component {
 
-  static propTypes = assign({
-    items: PropTypes.array,
-    options: PropTypes.object,
-    customTimes: PropTypes.shape({
-      datetime: PropTypes.instanceOf(Date),
-      id: PropTypes.string
-    }),
-  }, eventPropTypes)
-
-  static defaultProps = assign({
-    items: [],
-    options: {},
-    customTimes: {}
-  }, eventDefaultProps)
-
-  state = {
-    // NOTE we store custom times on the state to enable us to diff with new
-    // custom times and add or remove the elements with visjs
-    customTimes: []
-  }
-
   componentWillUnmount() {
     this.TimelineElement.destroy()
   }
@@ -138,3 +117,24 @@ export default class Timeline extends Component {
     return <div ref='container' />
   }
 }
+
+Timeline.state = {
+  // NOTE we store custom times on the state to enable us to diff with new
+  // custom times and add or remove the elements with visjs
+  customTimes: []
+}
+
+Timeline.propTypes = assign({
+  items: PropTypes.array,
+  options: PropTypes.object,
+  customTimes: PropTypes.shape({
+    datetime: PropTypes.instanceOf(Date),
+    id: PropTypes.string
+  }),
+}, eventPropTypes)
+
+Timeline.defaultProps = assign({
+  items: [],
+  options: {},
+  customTimes: {}
+}, eventDefaultProps)
