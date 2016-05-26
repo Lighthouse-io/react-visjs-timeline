@@ -5,6 +5,7 @@ import difference from 'lodash/difference'
 import intersection from 'lodash/intersection'
 import each from 'lodash/each'
 import assign from 'lodash/assign'
+import omit from 'lodash/omit'
 import keys from 'lodash/keys'
 
 const noop = function() {}
@@ -80,6 +81,7 @@ export default class Timeline extends Component {
       items,
       options,
       customTimes,
+      animate = true,
     } = this.props
 
     const timelineItems = new vis.DataSet(items)
@@ -87,7 +89,18 @@ export default class Timeline extends Component {
 
     if (timelineExists) {
       $el.setItems(timelineItems)
-      $el.setOptions(options)
+
+      let updatedOptions
+
+      // If animate option is set, we should animate the timeline to any new
+      // start/end values instead of jumping straight to them
+      if (animate) {
+        updatedOptions = omit(options, 'start', 'end')
+        $el.setWindow(options.start, options.end, { animation: animate })
+      }
+
+      $el.setOptions(updatedOptions)
+
     } else {
       $el = this.TimelineElement = new vis.Timeline(container, timelineItems, options)
 
@@ -133,10 +146,14 @@ Timeline.propTypes = assign({
     datetime: PropTypes.instanceOf(Date),
     id: PropTypes.string
   }),
+  animate: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object,
+  ]),
 }, eventPropTypes)
 
 Timeline.defaultProps = assign({
   items: [],
   options: {},
-  customTimes: {}
+  customTimes: {},
 }, eventDefaultProps)
