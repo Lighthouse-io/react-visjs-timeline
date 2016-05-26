@@ -98,6 +98,18 @@ function rangeChangeHandler(props) {
 }
 ```
 
+## Animation
+
+You can enable animation (when the options start/end values change) by passing a prop of `animation` to the component. The available options for this prop follow the same conventions as `setWindow` in vis.js. So you can either pass a boolean value (`true` by default) or an object specifying your animation configuration, e.g:
+
+```
+// animate prop...
+{
+  duration: 3000,
+  easingFunction: 'easeInQuint',
+}
+```
+
 ## Styling
 
 Import your custom CSS *after* you import the component from the module, e.g:
