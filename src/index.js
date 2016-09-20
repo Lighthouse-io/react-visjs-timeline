@@ -82,6 +82,7 @@ export default class Timeline extends Component {
       options,
       customTimes,
       animate = true,
+      currentTime
     } = this.props
 
     const timelineItems = new vis.DataSet(items)
@@ -107,6 +108,10 @@ export default class Timeline extends Component {
       events.forEach(event => {
         $el.on(event, this.props[`${event}Handler`])
       })
+    }
+
+    if (currentTime) {
+      $el.setCurrentTime(currentTime)
     }
 
     // diff the custom times to decipher new, removing, updating
@@ -150,6 +155,11 @@ Timeline.propTypes = assign({
     PropTypes.bool,
     PropTypes.object,
   ]),
+  currentTime: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+      PropTypes.number
+  ])
 }, eventPropTypes)
 
 Timeline.defaultProps = assign({
