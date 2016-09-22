@@ -79,6 +79,7 @@ export default class Timeline extends Component {
 
     const {
       items,
+      groups,
       options,
       customTimes,
       animate = true,
@@ -103,7 +104,7 @@ export default class Timeline extends Component {
       $el.setOptions(updatedOptions)
 
     } else {
-      $el = this.TimelineElement = new vis.Timeline(container, timelineItems, options)
+      $el = this.TimelineElement = new vis.Timeline(container, timelineItems, groups, options)
 
       events.forEach(event => {
         $el.on(event, this.props[`${event}Handler`])
@@ -146,6 +147,7 @@ export default class Timeline extends Component {
 
 Timeline.propTypes = assign({
   items: PropTypes.array,
+  groups: PropTypes.array,
   options: PropTypes.object,
   customTimes: PropTypes.shape({
     datetime: PropTypes.instanceOf(Date),
@@ -164,6 +166,7 @@ Timeline.propTypes = assign({
 
 Timeline.defaultProps = assign({
   items: [],
+  groups: [],
   options: {},
   customTimes: {},
 }, eventDefaultProps)
