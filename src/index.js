@@ -56,15 +56,18 @@ export default class Timeline extends Component {
   shouldComponentUpdate(nextProps) {
     const {
       items,
+      groups,
       options,
       customTimes
     } = this.props
 
     const itemsChange = items !== nextProps.items
+    const groupsChange = groups !== nextProps.groups
     const optionsChange = options !== nextProps.options
     const customTimesChange = customTimes !== nextProps.customTimes
 
     return itemsChange ||
+      groupsChange ||
       optionsChange ||
       customTimesChange
   }
@@ -87,10 +90,12 @@ export default class Timeline extends Component {
     } = this.props
 
     const timelineItems = new vis.DataSet(items)
+    const timelineGroups = new vis.DataSet(groups)
     const timelineExists = !!$el
 
     if (timelineExists) {
       $el.setItems(timelineItems)
+      $el.setGroups(timelineGroups)
 
       let updatedOptions
 
@@ -104,7 +109,7 @@ export default class Timeline extends Component {
       $el.setOptions(updatedOptions)
 
     } else {
-      $el = this.TimelineElement = new vis.Timeline(container, timelineItems, groups, options)
+      $el = this.TimelineElement = new vis.Timeline(container, timelineItems, timelineGroups, options)
 
       events.forEach(event => {
         $el.on(event, this.props[`${event}Handler`])
