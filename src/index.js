@@ -171,7 +171,7 @@ Timeline.propTypes = assign({
 
 Timeline.defaultProps = assign({
   items: [],
-  groups: [],
+  groups: null,
   options: {},
   customTimes: {},
 }, eventDefaultProps)
