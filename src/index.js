@@ -97,7 +97,9 @@ export default class Timeline extends Component {
 
     if (timelineExists) {
       $el.setItems(timelineItems)
-      $el.setGroups(timelineGroups)
+      if (timelineGroups.length > 0) {
+        $el.setGroups(timelineGroups)
+      }
 
       let updatedOptions
 
@@ -112,7 +114,12 @@ export default class Timeline extends Component {
       $el.setSelection(selection)
 
     } else {
-      $el = this.TimelineElement = new vis.Timeline(container, timelineItems, timelineGroups, options)
+      if (timelineGroups.length > 0) {
+        $el = this.TimelineElement = new vis.Timeline(container, timelineItems, timelineGroups, options)
+      }
+      else {
+        $el = this.TimelineElement = new vis.Timeline(container, timelineItems, options)
+      }
 
       events.forEach(event => {
         $el.on(event, this.props[`${event}Handler`])
