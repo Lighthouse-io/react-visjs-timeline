@@ -93,11 +93,12 @@ export default class Timeline extends Component {
 
     const timelineItems = new vis.DataSet(items)
     const timelineGroups = new vis.DataSet(groups)
+    const hasGroups = timelineGroups.length 
     const timelineExists = !!$el
 
     if (timelineExists) {
       $el.setItems(timelineItems)
-      if (timelineGroups.length > 0) {
+      if (hasGroups) {
         $el.setGroups(timelineGroups)
       }
 
@@ -114,7 +115,7 @@ export default class Timeline extends Component {
       $el.setSelection(selection)
 
     } else {
-      if (timelineGroups.length > 0) {
+      if (hasGroups) {
         $el = this.TimelineElement = new vis.Timeline(container, timelineItems, timelineGroups, options)
       }
       else {
