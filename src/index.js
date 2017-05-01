@@ -73,13 +73,8 @@ export default class Timeline extends Component {
       customTimesChange
   }
 
-  // create timeline element
-  // set custom time(s)
-  // set data set
-
   init() {
     const { container } = this.refs
-    let $el = this.TimelineElement
 
     const {
       items,
@@ -91,45 +86,36 @@ export default class Timeline extends Component {
       currentTime
     } = this.props
 
-    const timelineItems = new vis.DataSet(items)
-    const timelineGroups = new vis.DataSet(groups)
-    const hasGroups = timelineGroups.length 
+    this.TimelineElement = this.TimelineElement || new vis.Timeline(container)
+
+    const $el = this.TimelineElement
     const timelineExists = !!$el
+    const hasGroups = groups.length > 0
 
-    if (timelineExists) {
-      $el.setItems(timelineItems)
-      if (hasGroups) {
-        $el.setGroups(timelineGroups)
-      }
+    let timelineOptions = options
 
-      let updatedOptions
-
+    if (timelineExists && animate) {
       // If animate option is set, we should animate the timeline to any new
       // start/end values instead of jumping straight to them
-      if (animate) {
-        updatedOptions = omit(options, 'start', 'end')
-        $el.setWindow(options.start, options.end, { animation: animate })
-      }
+      timelineOptions = omit(options, 'start', 'end')
+      $el.setWindow(options.start, options.end, { animation: animate })
+    }
 
-      $el.setOptions(updatedOptions)
-      $el.setSelection(selection)
+    $el.setOptions(timelineOptions)
+    $el.setItems(items)
+    $el.setSelection(selection)
 
-    } else {
-      if (hasGroups) {
-        $el = this.TimelineElement = new vis.Timeline(container, timelineItems, timelineGroups, options)
-      }
-      else {
-        $el = this.TimelineElement = new vis.Timeline(container, timelineItems, options)
-      }
-
-      events.forEach(event => {
-        $el.on(event, this.props[`${event}Handler`])
-      })
+    if (hasGroups) {
+      $el.setGroups(groups)
     }
 
     if (currentTime) {
       $el.setCurrentTime(currentTime)
     }
+
+    events.forEach(event => {
+      $el.on(event, this.props[`${event}Handler`])
+    })
 
     // diff the custom times to decipher new, removing, updating
     const customTimeKeysPrev = keys(this.state.customTimes)
@@ -152,8 +138,6 @@ export default class Timeline extends Component {
 
     // store new customTimes in state for future diff
     this.setState({ customTimes })
-
-
   }
 
   render() {
@@ -183,7 +167,7 @@ Timeline.propTypes = assign({
 
 Timeline.defaultProps = assign({
   items: [],
-  groups: null,
+  groups: [],
   options: {},
   selection: [],
   customTimes: {},
