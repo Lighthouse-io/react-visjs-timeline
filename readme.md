@@ -45,6 +45,7 @@ Not all features from vis.js timeline are supported (Pull Requests are welcome).
 
 * Configuration Options
 * Items
+* Groups
 * Custom Times
 * Events
 
@@ -64,6 +65,21 @@ const items = [{
   items={items}
 />
 ```
+
+## Groups
+
+Groups follow the exact same for format as they do in vis.js. See the [vis.js documentation](http://visjs.org/docs/timeline/#groups) for more information.
+
+```
+const groups = [{
+  id: 1,
+  content: 'Group A',
+}]
+
+<Timeline
+  options={options}
+  groups={groups}
+/>
 
 ## Custom Times
 
