@@ -93,6 +93,8 @@ export default class Timeline extends Component {
     const hasGroups = groups.length > 0
 
     let timelineOptions = options
+    
+    $el.setOptions(timelineOptions)
 
     if (timelineExists && animate) {
       // If animate option is set, we should animate the timeline to any new
@@ -101,7 +103,6 @@ export default class Timeline extends Component {
       $el.setWindow(options.start, options.end, { animation: animate })
     }
 
-    $el.setOptions(timelineOptions)
     $el.setItems(items)
     $el.setSelection(selection)
 
