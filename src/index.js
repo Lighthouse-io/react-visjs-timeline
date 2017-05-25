@@ -42,10 +42,18 @@ export default class Timeline extends Component {
   }
 
   componentWillUnmount() {
-    this.TimelineElement.destroy()
+    this.$el.destroy()
   }
 
   componentDidMount() {
+    const { container } = this.refs
+
+    this.$el = new vis.Timeline(container)
+
+    events.forEach(event => {
+      this.$el.on(event, this.props[`${event}Handler`])
+    })
+
     this.init()
   }
 
@@ -74,8 +82,6 @@ export default class Timeline extends Component {
   }
 
   init() {
-    const { container } = this.refs
-
     const {
       items,
       groups,
@@ -86,36 +92,30 @@ export default class Timeline extends Component {
       currentTime
     } = this.props
 
-    this.TimelineElement = this.TimelineElement || new vis.Timeline(container)
-
-    const $el = this.TimelineElement
-    const timelineExists = !!$el
     const hasGroups = groups.length > 0
-
     let timelineOptions = options
 
-    if (timelineExists && animate) {
+    if (animate) {
       // If animate option is set, we should animate the timeline to any new
       // start/end values instead of jumping straight to them
       timelineOptions = omit(options, 'start', 'end')
-      $el.setWindow(options.start, options.end, { animation: animate })
+
+      this.$el.setWindow(options.start, options.end, {
+        animation: animate
+      })
     }
 
-    $el.setOptions(timelineOptions)
-    $el.setItems(items)
-    $el.setSelection(selection)
+    this.$el.setOptions(timelineOptions)
+    this.$el.setItems(items)
+    this.$el.setSelection(selection)
 
     if (hasGroups) {
-      $el.setGroups(groups)
+      this.$el.setGroups(groups)
     }
 
     if (currentTime) {
-      $el.setCurrentTime(currentTime)
+      this.$el.setCurrentTime(currentTime)
     }
-
-    events.forEach(event => {
-      $el.on(event, this.props[`${event}Handler`])
-    })
 
     // diff the custom times to decipher new, removing, updating
     const customTimeKeysPrev = keys(this.state.customTimes)
@@ -125,15 +125,15 @@ export default class Timeline extends Component {
     const customTimeKeysToUpdate = intersection(customTimeKeysPrev, customTimeKeysNew)
 
     // NOTE this has to be in arrow function so context of `this` is based on
-    // $el and not `each`
-    each(customTimeKeysToRemove, id => $el.removeCustomTime(id))
+    // this.$el and not `each`
+    each(customTimeKeysToRemove, id => this.$el.removeCustomTime(id))
     each(customTimeKeysToAdd, id => {
       const datetime = customTimes[id]
-      $el.addCustomTime(datetime, id)
+      this.$el.addCustomTime(datetime, id)
     })
     each(customTimeKeysToUpdate, id => {
       const datetime = customTimes[id]
-      $el.setCustomTime(datetime, id)
+      this.$el.setCustomTime(datetime, id)
     })
 
     // store new customTimes in state for future diff
