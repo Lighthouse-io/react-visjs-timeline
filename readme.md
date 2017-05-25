@@ -80,6 +80,7 @@ const groups = [{
   options={options}
   groups={groups}
 />
+```
 
 ## Custom Times
 
