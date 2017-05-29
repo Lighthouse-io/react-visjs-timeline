@@ -1,12 +1,28 @@
 import vis from 'vis'
 import 'vis/dist/vis.css'
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import difference from 'lodash/difference'
 import intersection from 'lodash/intersection'
 import each from 'lodash/each'
 import assign from 'lodash/assign'
 import omit from 'lodash/omit'
 import keys from 'lodash/keys'
+
+const PropTypeShimRequired = () => {
+  // Is React >= 15.5?
+  if (React.version && typeof React.version === 'string') {
+      const version = React.version.split('.')
+      const major = parseInt(version[0])
+      const minor = parseInt(version[1])
+      return (major > 15 || (major == 15 && minor >= 5))
+  }
+}
+
+const PropTypes = (PropTypeShimRequired())
+? require('prop-types')
+: require('react').PropTypes
+
+
 
 const noop = function() {}
 const events = [
