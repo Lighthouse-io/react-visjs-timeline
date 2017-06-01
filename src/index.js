@@ -74,11 +74,13 @@ export default class Timeline extends Component {
     const groupsChange = groups !== nextProps.groups
     const optionsChange = options !== nextProps.options
     const customTimesChange = customTimes !== nextProps.customTimes
+    const selectionChange = selection !== nextProps.selection
 
     return itemsChange ||
       groupsChange ||
       optionsChange ||
-      customTimesChange
+      customTimesChange ||
+      selectionChange
   }
 
   init() {
