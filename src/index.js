@@ -89,6 +89,7 @@ export default class Timeline extends Component {
       groups,
       options,
       selection,
+      selectionOptions = {},
       customTimes,
       animate = true,
       currentTime
@@ -109,7 +110,7 @@ export default class Timeline extends Component {
 
     this.$el.setOptions(timelineOptions)
     this.$el.setItems(items)
-    this.$el.setSelection(selection)
+    this.$el.setSelection(selection, selectionOptions)
 
     if (hasGroups) {
       this.$el.setGroups(groups)
