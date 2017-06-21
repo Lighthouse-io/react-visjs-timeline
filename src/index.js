@@ -110,7 +110,9 @@ export default class Timeline extends Component {
     this.$el.setSelection(selection)
 
     if (hasGroups) {
-      this.$el.setGroups(groups)
+      const groupsDataset = new vis.DataSet();
+      groupsDataset.add(groups);
+      this.$el.setGroups(groupsDataset)
     }
 
     if (currentTime) {
