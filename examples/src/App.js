@@ -4,6 +4,10 @@ import moment from 'moment'
 import './App.css'
 
 const basicExample = {
+  options: {
+    start: '2014-04-10',
+    end: '2014-04-30',
+  },
   items: [
     {id: 1, content: 'item 1', start: '2014-04-20'},
     {id: 2, content: 'item 2', start: '2014-04-14'},

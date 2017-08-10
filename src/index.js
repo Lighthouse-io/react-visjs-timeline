@@ -48,7 +48,7 @@ export default class Timeline extends Component {
   componentDidMount() {
     const { container } = this.refs
 
-    this.$el = new vis.Timeline(container)
+    this.$el = new vis.Timeline(container, undefined, this.props.options)
 
     events.forEach(event => {
       this.$el.on(event, this.props[`${event}Handler`])
