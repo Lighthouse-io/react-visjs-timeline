@@ -4224,9 +4224,9 @@ react-scripts@0.9.5:
   optionalDependencies:
     fsevents "1.0.17"
 
-react-visjs-timeline@1.3.3-beta-4:
-  version "1.3.3-beta-4"
-  resolved "https://registry.yarnpkg.com/react-visjs-timeline/-/react-visjs-timeline-1.3.3-beta-4.tgz#895288772585bf05b3e5d75d37edd2aeb387605d"
+react-visjs-timeline@1.3.4-beta-1:
+  version "1.3.4-beta-1"
+  resolved "https://registry.yarnpkg.com/react-visjs-timeline/-/react-visjs-timeline-1.3.4-beta-1.tgz#2b2450482d3c3547774f2244bab91874ce68c69a"
   dependencies:
     lodash "^4.12.0"
 

@@ -4,6 +4,10 @@ import moment from 'moment'
 import './App.css'
 
 const basicExample = {
+  options: {
+    start: '2014-04-10',
+    end: '2014-04-30',
+  },
   items: [
     {id: 1, content: 'item 1', start: '2014-04-20'},
     {id: 2, content: 'item 2', start: '2014-04-14'},
@@ -47,6 +51,14 @@ for (let i = 0; i < itemCount; i++) {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      selectedIds: []
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -59,9 +71,19 @@ class App extends Component {
           and groups via the DataSet.</p>
         <Timeline
           {...groupsExample}
+          clickHandler={this.clickHandler.bind(this)}
+          selection={this.state.selectedIds}
         />
       </div>
     )
+  }
+
+  clickHandler(props) {
+    const { group } = props
+    const selectedIds = groupsExample.items.filter(item => item.group === group).map(item => item.id)
+    this.setState({
+      selectedIds
+    })
   }
 }
 
