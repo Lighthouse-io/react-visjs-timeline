@@ -92,7 +92,7 @@ export default class Timeline extends Component {
       selection,
       selectionOptions = {},
       customTimes,
-      animate = false,
+      animate = true,
       currentTime
     } = this.props
 
