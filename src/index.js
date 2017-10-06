@@ -21,7 +21,11 @@ const events = [
   'rangechanged',
   'select',
   'timechange',
-  'timechanged'
+  'timechanged',
+  'mouseOver',
+  'mouseMove',
+  'itemover',
+  'itemout'
 ]
 
 const eventPropTypes = {}
