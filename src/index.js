@@ -1,15 +1,15 @@
-import vis from 'vis/dist/vis-timeline-graph2d.min'
-import 'vis/dist/vis-timeline-graph2d.min.css'
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import difference from 'lodash/difference'
-import intersection from 'lodash/intersection'
-import each from 'lodash/each'
-import assign from 'lodash/assign'
-import omit from 'lodash/omit'
-import keys from 'lodash/keys'
+import vis from 'vis/dist/vis-timeline-graph2d.min';
+import 'vis/dist/vis-timeline-graph2d.min.css';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import difference from 'lodash/difference';
+import intersection from 'lodash/intersection';
+import each from 'lodash/each';
+import assign from 'lodash/assign';
+import omit from 'lodash/omit';
+import keys from 'lodash/keys';
 
-const noop = function() {}
+const noop = function() {};
 const events = [
   'currentTimeTick',
   'click',
@@ -28,8 +28,8 @@ const events = [
   'itemout',
 ]
 
-const eventPropTypes = {}
-const eventDefaultProps = {}
+const eventPropTypes = {};
+const eventDefaultProps = {};
 
 each(events, event => {
   ;(eventPropTypes[event] = PropTypes.func),
@@ -49,15 +49,15 @@ export default class Timeline extends Component {
   }
 
   componentDidMount() {
-    const { container } = this.refs
+    const { container } = this.refs;
 
-    this.$el = new vis.Timeline(container, undefined, this.props.options)
+    this.$el = new vis.Timeline(container, undefined, this.props.options);
 
     events.forEach(event => {
-      this.$el.on(event, this.props[`${event}Handler`])
-    })
+      this.$el.on(event, this.props[`${event}Handler`]);
+    });
 
-    this.init()
+    this.init();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -99,6 +99,10 @@ export default class Timeline extends Component {
       customTimesChange;
   }
 
+  componentWillUnmount() {
+    this.$el.destroy();
+  }
+
   optionsAreEqual(options1, options2) {
     return (
       options1.template == options2.template ||
@@ -119,7 +123,7 @@ export default class Timeline extends Component {
 
   customTimesAreEqual(timesArr1, timesArr2) {
     return !Object.values(timesArr1).some((time1) => {
-      return !timesInArray(time1, Object.values(timesArr2));
+      return !this.timeInArray(time1, Object.values(timesArr2));
     });
   }
 
@@ -147,16 +151,16 @@ export default class Timeline extends Component {
     this.$el.setOptions(timelineOptions);
 
     if (groups.length > 0) {
-      const groupsDataset = new vis.DataSet()
-      groupsDataset.add(groups)
-      this.$el.setGroups(groupsDataset)
+      const groupsDataset = new vis.DataSet();
+      groupsDataset.add(groups);
+      this.$el.setGroups(groupsDataset);
     }
 
     this.updateItems(items);
     this.updateSelection(selection, selectionOptions);
 
     if (currentTime) {
-      this.$el.setCurrentTime(currentTime)
+      this.$el.setCurrentTime(currentTime);
     }
 
     // diff the custom times to decipher new, removing, updating
@@ -177,18 +181,18 @@ export default class Timeline extends Component {
 
     // NOTE this has to be in arrow function so context of `this` is based on
     // this.$el and not `each`
-    each(customTimeKeysToRemove, id => this.$el.removeCustomTime(id))
+    each(customTimeKeysToRemove, id => this.$el.removeCustomTime(id));
     each(customTimeKeysToAdd, id => {
-      const datetime = customTimes[id]
-      this.$el.addCustomTime(datetime, id)
-    })
+      const datetime = customTimes[id];
+      this.$el.addCustomTime(datetime, id);
+    });
     each(customTimeKeysToUpdate, id => {
-      const datetime = customTimes[id]
-      this.$el.setCustomTime(datetime, id)
-    })
+      const datetime = customTimes[id];
+      this.$el.setCustomTime(datetime, id);
+    });
 
     // store new customTimes in state for future diff
-    this.setState({ customTimes })
+    this.setState({ customTimes });
   }
 
   updateItems(items) {
@@ -200,10 +204,6 @@ export default class Timeline extends Component {
   }
 
   updateSelection(selection, selectionOptions={}) {
-    let selectionArr = selection;
-    if(Array.isArray(selection) === false) {
-      selectionArr = [selection];
-    }
     this.$el.setSelection(selection, selectionOptions);
   }
 
@@ -231,19 +231,14 @@ Timeline.propTypes = assign({
   currentTime: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(Date),
-      PropTypes.number,
-    ]),
-  },
-  eventPropTypes
-)
+      PropTypes.number
+  ])
+}, eventPropTypes);
 
-Timeline.defaultProps = assign(
-  {
-    items: [],
-    groups: [],
-    options: {},
-    selection: [],
-    customTimes: {},
-  },
-  eventDefaultProps
-)
+Timeline.defaultProps = assign({
+  items: [],
+  groups: [],
+  options: {},
+  selection: [],
+  customTimes: {},
+}, eventDefaultProps);

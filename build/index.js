@@ -59,7 +59,8 @@ var eventPropTypes = {};
 var eventDefaultProps = {};
 
 (0, _each2.default)(events, function (event) {
-  eventPropTypes[event] = _propTypes2.default.func, eventDefaultProps[event + 'Handler'] = noop;
+  eventPropTypes[event] = _propTypes2.default.func;
+  eventDefaultProps[event + 'Handler'] = noop;
 });
 
 var Timeline = function (_Component) {
@@ -79,11 +80,6 @@ var Timeline = function (_Component) {
         // custom times and add or remove the elements with visjs
         customTimes: []
       };
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.$el.destroy();
     }
   }, {
     key: 'componentDidMount',
@@ -141,6 +137,11 @@ var Timeline = function (_Component) {
       return groupsChange || optionsChange || customTimesChange;
     }
   }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.$el.destroy();
+    }
+  }, {
     key: 'optionsAreEqual',
     value: function optionsAreEqual(options1, options2) {
       return options1.template == options2.template || options1.horizontalScroll == options2.horizontalScroll || options1.maxHeight == options2.maxHeight || options1.minHeight == options2.minHeight || options1.showCurrentTime == options2.showCurrentTime || options1.width == options2.width || options1.zoomable == options2.zoomable;
@@ -155,14 +156,16 @@ var Timeline = function (_Component) {
   }, {
     key: 'customTimesAreEqual',
     value: function customTimesAreEqual(timesArr1, timesArr2) {
+      var _this3 = this;
+
       return !Object.values(timesArr1).some(function (time1) {
-        return !timesInArray(time1, Object.values(timesArr2));
+        return !_this3.timeInArray(time1, Object.values(timesArr2));
       });
     }
   }, {
     key: 'init',
     value: function init() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _props2 = this.props,
           items = _props2.items,
@@ -211,15 +214,15 @@ var Timeline = function (_Component) {
       // NOTE this has to be in arrow function so context of `this` is based on
       // this.$el and not `each`
       (0, _each2.default)(customTimeKeysToRemove, function (id) {
-        return _this3.$el.removeCustomTime(id);
+        return _this4.$el.removeCustomTime(id);
       });
       (0, _each2.default)(customTimeKeysToAdd, function (id) {
         var datetime = customTimes[id];
-        _this3.$el.addCustomTime(datetime, id);
+        _this4.$el.addCustomTime(datetime, id);
       });
       (0, _each2.default)(customTimeKeysToUpdate, function (id) {
         var datetime = customTimes[id];
-        _this3.$el.setCustomTime(datetime, id);
+        _this4.$el.setCustomTime(datetime, id);
       });
 
       // store new customTimes in state for future diff
@@ -240,10 +243,6 @@ var Timeline = function (_Component) {
     value: function updateSelection(selection) {
       var selectionOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-      var selectionArr = selection;
-      if (Array.isArray(selection) === false) {
-        selectionArr = [selection];
-      }
       this.$el.setSelection(selection, selectionOptions);
     }
   }, {
