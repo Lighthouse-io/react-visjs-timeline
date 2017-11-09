@@ -60,26 +60,67 @@ export default class Timeline extends Component {
     this.init()
   }
 
-  componentDidUpdate() {
-    this.init()
+  shouldComponentUpdate(nextProps) {
+    const {
+      items,
+      groups,
+      options,
+      selection,
+      selectionOptions = {},
+      customTimes
+    } = this.props;
+
+    // if the items changed handle this manually. Avoids flickering in re-render
+    if(items !== nextProps.items) {
+      this.updateItems(nextProps.items);
+    }
+    // if the selection changed handle this manually. Allows users to more easily
+    // control the state of selected objects.
+    if(selection !== nextProps.selection) {
+      this.updateSelection(nextProps.selection, selectionOptions);
+    }
+
+    // if the window changed, handle this manually. Helps avoid flickering by
+    // unnecessary renders.
+    let oldStart = options.start;
+    let oldEnd = options.end;
+    let newStart = nextProps.options.start;
+    let newEnd = nextProps.options.end;
+    if(oldStart != newStart || oldEnd != newEnd) {
+      this.updateWindow(newStart, newEnd);
+    }
+
+    const groupsChange = groups != nextProps.groups;
+    const optionsChange = !this.optionsAreEqual(options, nextProps.options);
+    const customTimesChange = !this.customTimesAreEqual(customTimes, nextProps.customTimes);
+
+    return groupsChange ||
+      optionsChange ||
+      customTimesChange;
   }
 
-  shouldComponentUpdate(nextProps) {
-    const { items, groups, options, selection, customTimes } = this.props
-
-    const itemsChange = items !== nextProps.items
-    const groupsChange = groups !== nextProps.groups
-    const optionsChange = options !== nextProps.options
-    const customTimesChange = customTimes !== nextProps.customTimes
-    const selectionChange = selection !== nextProps.selection
-
+  optionsAreEqual(options1, options2) {
     return (
-      itemsChange ||
-      groupsChange ||
-      optionsChange ||
-      customTimesChange ||
-      selectionChange
-    )
+      options1.template == options2.template ||
+      options1.horizontalScroll == options2.horizontalScroll ||
+      options1.maxHeight == options2.maxHeight ||
+      options1.minHeight == options2.minHeight ||
+      options1.showCurrentTime == options2.showCurrentTime ||
+      options1.width == options2.width ||
+      options1.zoomable == options2.zoomable
+    );
+  }
+
+  timeInArray(time, array) {
+    return array.filter((time2) => {
+      return time == time2;
+    }).length > 0;
+  }
+
+  customTimesAreEqual(timesArr1, timesArr2) {
+    return !Object.values(timesArr1).some((time1) => {
+      return !timesInArray(time1, Object.values(timesArr2));
+    });
   }
 
   init() {
@@ -91,22 +132,19 @@ export default class Timeline extends Component {
       selectionOptions = {},
       customTimes,
       animate = true,
-      currentTime,
-    } = this.props
+      currentTime
+    } = this.props;
 
-    let timelineOptions = options
+    let timelineOptions = options;
 
     if (animate) {
       // If animate option is set, we should animate the timeline to any new
       // start/end values instead of jumping straight to them
-      timelineOptions = omit(options, 'start', 'end')
-
-      this.$el.setWindow(options.start, options.end, {
-        animation: animate,
-      })
+      timelineOptions = omit(options, 'start', 'end');
+      this.updateWindow(options.start, options.end);
     }
 
-    this.$el.setOptions(timelineOptions)
+    this.$el.setOptions(timelineOptions);
 
     if (groups.length > 0) {
       const groupsDataset = new vis.DataSet()
@@ -114,8 +152,8 @@ export default class Timeline extends Component {
       this.$el.setGroups(groupsDataset)
     }
 
-    this.$el.setItems(items)
-    this.$el.setSelection(selection, selectionOptions)
+    this.updateItems(items);
+    this.updateSelection(selection, selectionOptions);
 
     if (currentTime) {
       this.$el.setCurrentTime(currentTime)
@@ -153,23 +191,44 @@ export default class Timeline extends Component {
     this.setState({ customTimes })
   }
 
+  updateItems(items) {
+    this.$el.setItems(items);
+  }
+
+  updateWindow(start, end) {
+    this.$el.setWindow(start, end, { animation: this.props.animate});
+  }
+
+  updateSelection(selection, selectionOptions={}) {
+    let selectionArr = selection;
+    if(Array.isArray(selection) === false) {
+      selectionArr = [selection];
+    }
+    this.$el.setSelection(selection, selectionOptions);
+  }
+
   render() {
     return <div ref="container" />
   }
 }
 
-Timeline.propTypes = assign(
-  {
-    items: PropTypes.array,
-    groups: PropTypes.array,
-    options: PropTypes.object,
-    selection: PropTypes.array,
-    customTimes: PropTypes.shape({
-      datetime: PropTypes.instanceOf(Date),
-      id: PropTypes.string,
-    }),
-    animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-    currentTime: PropTypes.oneOfType([
+Timeline.propTypes = assign({
+  items: PropTypes.array,
+  groups: PropTypes.array,
+  options: PropTypes.object,
+  selection: PropTypes.oneOf([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
+  customTimes: PropTypes.shape({
+    datetime: PropTypes.instanceOf(Date),
+    id: PropTypes.string
+  }),
+  animate: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object,
+  ]),
+  currentTime: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(Date),
       PropTypes.number,
