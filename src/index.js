@@ -50,8 +50,8 @@ export default class Timeline extends Component {
     this.init()
   }
 
-  componentDidUpdate() {
-    this.init()
+  componentDidUpdate(prevProps) {
+    this.init(prevProps)
   }
 
   shouldComponentUpdate(nextProps) {
@@ -88,27 +88,30 @@ export default class Timeline extends Component {
       currentTime
     } = this.props
 
-    const {
-      items: prevItems,
-      groups: prevGroups,
-      options: prevOptions,
-      customTimes: prevCustomTimes
-    } = prevProps
-
-    this.initOptions(options, prevOptions, animate)
-
-    this.initGroups(groups, prevGroups)
-
-    this.initItems(items, prevItems, selection, selectionOptions)
-
-    if (currentTime) {
-      this.$el.setCurrentTime(currentTime)
+    if (!prevProps || options !== prevProps.options) {
+      this.initOptions(options, animate)
     }
 
-    this.initCustomTimes(customTimes, prevCustomTimes)
+    if (!prevProps || groups !== prevProps.groups) {
+      this.initGroups(groups)
+    }
+
+    if (!prevProps || items !== prevProps.items) {
+      this.initItems(items, selection, selectionOptions)
+    }
+
+    if (!prevProps || currentTime !== prevProps.currentTime) {
+      if (currentTime) {
+        this.$el.setCurrentTime(currentTime)
+      }
+    }
+
+    if (!prevProps || customTimes !== prevProps.customTimes) {
+      this.initCustomTimes(customTimes)
+    }
   }
 
-  initOptions(options, prevOptions, animate) {
+  initOptions(options, animate) {
 
     if (options === prevOptions) {
       // Nothing changed, so make sure we don't touch $el's options.
@@ -130,7 +133,7 @@ export default class Timeline extends Component {
     this.$el.setOptions(timelineOptions)
   }
 
-  initGroups(groups, prevGroups) {
+  initGroups(groups) {
 
     if (groups === prevGroups) {
       // Nothing changed, so make sure we don't touch $el's groups.
@@ -144,7 +147,7 @@ export default class Timeline extends Component {
     }
   }
 
-  initItems(items, prevItems, selection, selectionOptions) {
+  initItems(items, selection, selectionOptions) {
 
     if (items === prevItems) {
       // Nothing changed, so make sure we don't touch $el's items.
@@ -155,7 +158,7 @@ export default class Timeline extends Component {
     this.$el.setSelection(selection, selectionOptions)
   }
 
-  initCustomTimes(customTimes, prevCustomTimes) {
+  initCustomTimes(customTimes) {
     // diff the custom times to decipher new, removing, updating
     const customTimeKeysPrev = keys(prevCustomTimes)
     const customTimeKeysNew = keys(customTimes)
