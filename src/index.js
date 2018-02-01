@@ -1,6 +1,6 @@
 import vis from 'vis/dist/vis-timeline-graph2d.min'
 import 'vis/dist/vis-timeline-graph2d.min.css'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import difference from 'lodash/difference'
 import intersection from 'lodash/intersection'
@@ -33,14 +33,6 @@ each(events, event => {
 })
 
 export default class Timeline extends Component {
-
-  componentWillMount() {
-    this.state = {
-      // NOTE we store custom times on the state to enable us to diff with new
-      // custom times and add or remove the elements with visjs
-      customTimes: []
-    }
-  }
 
   componentWillUnmount() {
     this.$el.destroy()
@@ -84,7 +76,7 @@ export default class Timeline extends Component {
       selectionChange
   }
 
-  init() {
+  init(prevProps) {
     const {
       items,
       groups,
@@ -95,6 +87,33 @@ export default class Timeline extends Component {
       animate = true,
       currentTime
     } = this.props
+
+    const {
+      items: prevItems,
+      groups: prevGroups,
+      options: prevOptions,
+      customTimes: prevCustomTimes
+    } = prevProps
+
+    this.initOptions(options, prevOptions, animate)
+
+    this.initGroups(groups, prevGroups)
+
+    this.initItems(items, prevItems, selection, selectionOptions)
+
+    if (currentTime) {
+      this.$el.setCurrentTime(currentTime)
+    }
+
+    this.initCustomTimes(customTimes, prevCustomTimes)
+  }
+
+  initOptions(options, prevOptions, animate) {
+
+    if (options === prevOptions) {
+      // Nothing changed, so make sure we don't touch $el's options.
+      return
+    }
 
     let timelineOptions = options
 
@@ -109,22 +128,36 @@ export default class Timeline extends Component {
     }
 
     this.$el.setOptions(timelineOptions)
+  }
+
+  initGroups(groups, prevGroups) {
+
+    if (groups === prevGroups) {
+      // Nothing changed, so make sure we don't touch $el's groups.
+      return
+    }
 
     if (groups.length > 0) {
       const groupsDataset = new vis.DataSet()
       groupsDataset.add(groups)
       this.$el.setGroups(groupsDataset)
     }
+  }
+
+  initItems(items, prevItems, selection, selectionOptions) {
+
+    if (items === prevItems) {
+      // Nothing changed, so make sure we don't touch $el's items.
+      return
+    }
 
     this.$el.setItems(items)
     this.$el.setSelection(selection, selectionOptions)
+  }
 
-    if (currentTime) {
-      this.$el.setCurrentTime(currentTime)
-    }
-
+  initCustomTimes(customTimes, prevCustomTimes) {
     // diff the custom times to decipher new, removing, updating
-    const customTimeKeysPrev = keys(this.state.customTimes)
+    const customTimeKeysPrev = keys(prevCustomTimes)
     const customTimeKeysNew = keys(customTimes)
     const customTimeKeysToAdd = difference(customTimeKeysNew, customTimeKeysPrev)
     const customTimeKeysToRemove = difference(customTimeKeysPrev, customTimeKeysNew)
@@ -141,9 +174,6 @@ export default class Timeline extends Component {
       const datetime = customTimes[id]
       this.$el.setCustomTime(datetime, id)
     })
-
-    // store new customTimes in state for future diff
-    this.setState({ customTimes })
   }
 
   render() {
