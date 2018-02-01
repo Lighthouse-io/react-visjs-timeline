@@ -107,7 +107,8 @@ export default class Timeline extends Component {
     }
 
     if (!prevProps || customTimes !== prevProps.customTimes) {
-      this.initCustomTimes(customTimes, prevProps || {})
+      const prevCustomTimes = prevProps && prevProps.customTimes || {}
+      this.initCustomTimes(customTimes, prevCustomTimes)
     }
   }
 

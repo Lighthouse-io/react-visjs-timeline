@@ -151,7 +151,8 @@ var Timeline = function (_Component) {
       }
 
       if (!prevProps || customTimes !== prevProps.customTimes) {
-        this.initCustomTimes(customTimes, prevProps || {});
+        var prevCustomTimes = prevProps && prevProps.customTimes || {};
+        this.initCustomTimes(customTimes, prevCustomTimes);
       }
     }
   }, {
