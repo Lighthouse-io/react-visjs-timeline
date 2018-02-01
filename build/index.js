@@ -94,8 +94,8 @@ var Timeline = function (_Component) {
     }
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.init();
+    value: function componentDidUpdate(prevProps) {
+      this.init(prevProps);
     }
   }, {
     key: 'shouldComponentUpdate',
@@ -130,27 +130,33 @@ var Timeline = function (_Component) {
           _props2$animate = _props2.animate,
           animate = _props2$animate === undefined ? true : _props2$animate,
           currentTime = _props2.currentTime;
-      var prevItems = prevProps.items,
-          prevGroups = prevProps.groups,
-          prevOptions = prevProps.options,
-          prevCustomTimes = prevProps.customTimes;
 
 
-      this.initOptions(options, prevOptions, animate);
-
-      this.initGroups(groups, prevGroups);
-
-      this.initItems(items, prevItems, selection, selectionOptions);
-
-      if (currentTime) {
-        this.$el.setCurrentTime(currentTime);
+      if (!prevProps || options !== prevProps.options) {
+        this.initOptions(options, animate);
       }
 
-      this.initCustomTimes(customTimes, prevCustomTimes);
+      if (!prevProps || groups !== prevProps.groups) {
+        this.initGroups(groups);
+      }
+
+      if (!prevProps || items !== prevProps.items) {
+        this.initItems(items, selection, selectionOptions);
+      }
+
+      if (!prevProps || currentTime !== prevProps.currentTime) {
+        if (currentTime) {
+          this.$el.setCurrentTime(currentTime);
+        }
+      }
+
+      if (!prevProps || customTimes !== prevProps.customTimes) {
+        this.initCustomTimes(customTimes);
+      }
     }
   }, {
     key: 'initOptions',
-    value: function initOptions(options, prevOptions, animate) {
+    value: function initOptions(options, animate) {
 
       if (options === prevOptions) {
         // Nothing changed, so make sure we don't touch $el's options.
@@ -173,7 +179,7 @@ var Timeline = function (_Component) {
     }
   }, {
     key: 'initGroups',
-    value: function initGroups(groups, prevGroups) {
+    value: function initGroups(groups) {
 
       if (groups === prevGroups) {
         // Nothing changed, so make sure we don't touch $el's groups.
@@ -188,7 +194,7 @@ var Timeline = function (_Component) {
     }
   }, {
     key: 'initItems',
-    value: function initItems(items, prevItems, selection, selectionOptions) {
+    value: function initItems(items, selection, selectionOptions) {
 
       if (items === prevItems) {
         // Nothing changed, so make sure we don't touch $el's items.
@@ -200,7 +206,7 @@ var Timeline = function (_Component) {
     }
   }, {
     key: 'initCustomTimes',
-    value: function initCustomTimes(customTimes, prevCustomTimes) {
+    value: function initCustomTimes(customTimes) {
       var _this3 = this;
 
       // diff the custom times to decipher new, removing, updating
