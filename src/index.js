@@ -107,16 +107,11 @@ export default class Timeline extends Component {
     }
 
     if (!prevProps || customTimes !== prevProps.customTimes) {
-      this.initCustomTimes(customTimes)
+      this.initCustomTimes(customTimes, prevProps || {})
     }
   }
 
   initOptions(options, animate) {
-
-    if (options === prevOptions) {
-      // Nothing changed, so make sure we don't touch $el's options.
-      return
-    }
 
     let timelineOptions = options
 
@@ -135,11 +130,6 @@ export default class Timeline extends Component {
 
   initGroups(groups) {
 
-    if (groups === prevGroups) {
-      // Nothing changed, so make sure we don't touch $el's groups.
-      return
-    }
-
     if (groups.length > 0) {
       const groupsDataset = new vis.DataSet()
       groupsDataset.add(groups)
@@ -149,16 +139,11 @@ export default class Timeline extends Component {
 
   initItems(items, selection, selectionOptions) {
 
-    if (items === prevItems) {
-      // Nothing changed, so make sure we don't touch $el's items.
-      return
-    }
-
     this.$el.setItems(items)
     this.$el.setSelection(selection, selectionOptions)
   }
 
-  initCustomTimes(customTimes) {
+  initCustomTimes(customTimes, prevCustomTimes) {
     // diff the custom times to decipher new, removing, updating
     const customTimeKeysPrev = keys(prevCustomTimes)
     const customTimeKeysNew = keys(customTimes)

@@ -151,17 +151,12 @@ var Timeline = function (_Component) {
       }
 
       if (!prevProps || customTimes !== prevProps.customTimes) {
-        this.initCustomTimes(customTimes);
+        this.initCustomTimes(customTimes, prevProps || {});
       }
     }
   }, {
     key: 'initOptions',
     value: function initOptions(options, animate) {
-
-      if (options === prevOptions) {
-        // Nothing changed, so make sure we don't touch $el's options.
-        return;
-      }
 
       var timelineOptions = options;
 
@@ -181,11 +176,6 @@ var Timeline = function (_Component) {
     key: 'initGroups',
     value: function initGroups(groups) {
 
-      if (groups === prevGroups) {
-        // Nothing changed, so make sure we don't touch $el's groups.
-        return;
-      }
-
       if (groups.length > 0) {
         var groupsDataset = new _visTimelineGraph2d2.default.DataSet();
         groupsDataset.add(groups);
@@ -196,17 +186,12 @@ var Timeline = function (_Component) {
     key: 'initItems',
     value: function initItems(items, selection, selectionOptions) {
 
-      if (items === prevItems) {
-        // Nothing changed, so make sure we don't touch $el's items.
-        return;
-      }
-
       this.$el.setItems(items);
       this.$el.setSelection(selection, selectionOptions);
     }
   }, {
     key: 'initCustomTimes',
-    value: function initCustomTimes(customTimes) {
+    value: function initCustomTimes(customTimes, prevCustomTimes) {
       var _this3 = this;
 
       // diff the custom times to decipher new, removing, updating
