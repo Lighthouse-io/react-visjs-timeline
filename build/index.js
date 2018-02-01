@@ -14,6 +14,8 @@ require('vis/dist/vis-timeline-graph2d.min.css');
 
 var _react = require('react');
 
+var _react2 = _interopRequireDefault(_react);
+
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -225,7 +227,7 @@ var Timeline = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      return React.createElement('div', { ref: 'container' });
+      return _react2.default.createElement('div', { ref: 'container' });
     }
   }]);
 
