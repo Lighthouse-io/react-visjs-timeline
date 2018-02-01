@@ -34,14 +34,6 @@ each(events, event => {
 
 export default class Timeline extends Component {
 
-  componentWillMount() {
-    this.state = {
-      // NOTE we store custom times on the state to enable us to diff with new
-      // custom times and add or remove the elements with visjs
-      customTimes: []
-    }
-  }
-
   componentWillUnmount() {
     this.$el.destroy()
   }
@@ -58,8 +50,8 @@ export default class Timeline extends Component {
     this.init()
   }
 
-  componentDidUpdate() {
-    this.init()
+  componentDidUpdate(prevProps) {
+    this.init(prevProps)
   }
 
   shouldComponentUpdate(nextProps) {
@@ -84,7 +76,7 @@ export default class Timeline extends Component {
       selectionChange
   }
 
-  init() {
+  init(prevProps) {
     const {
       items,
       groups,
@@ -95,6 +87,32 @@ export default class Timeline extends Component {
       animate = true,
       currentTime
     } = this.props
+
+    if (!prevProps || options !== prevProps.options) {
+      this.initOptions(options, animate)
+    }
+
+    if (!prevProps || groups !== prevProps.groups) {
+      this.initGroups(groups)
+    }
+
+    if (!prevProps || items !== prevProps.items) {
+      this.initItems(items, selection, selectionOptions)
+    }
+
+    if (!prevProps || currentTime !== prevProps.currentTime) {
+      if (currentTime) {
+        this.$el.setCurrentTime(currentTime)
+      }
+    }
+
+    if (!prevProps || customTimes !== prevProps.customTimes) {
+      const prevCustomTimes = prevProps && prevProps.customTimes || {}
+      this.initCustomTimes(customTimes, prevCustomTimes)
+    }
+  }
+
+  initOptions(options, animate) {
 
     let timelineOptions = options
 
@@ -109,22 +127,26 @@ export default class Timeline extends Component {
     }
 
     this.$el.setOptions(timelineOptions)
+  }
+
+  initGroups(groups) {
 
     if (groups.length > 0) {
       const groupsDataset = new vis.DataSet()
       groupsDataset.add(groups)
       this.$el.setGroups(groupsDataset)
     }
+  }
+
+  initItems(items, selection, selectionOptions) {
 
     this.$el.setItems(items)
     this.$el.setSelection(selection, selectionOptions)
+  }
 
-    if (currentTime) {
-      this.$el.setCurrentTime(currentTime)
-    }
-
+  initCustomTimes(customTimes, prevCustomTimes) {
     // diff the custom times to decipher new, removing, updating
-    const customTimeKeysPrev = keys(this.state.customTimes)
+    const customTimeKeysPrev = keys(prevCustomTimes)
     const customTimeKeysNew = keys(customTimes)
     const customTimeKeysToAdd = difference(customTimeKeysNew, customTimeKeysPrev)
     const customTimeKeysToRemove = difference(customTimeKeysPrev, customTimeKeysNew)
@@ -141,9 +163,6 @@ export default class Timeline extends Component {
       const datetime = customTimes[id]
       this.$el.setCustomTime(datetime, id)
     })
-
-    // store new customTimes in state for future diff
-    this.setState({ customTimes })
   }
 
   render() {
