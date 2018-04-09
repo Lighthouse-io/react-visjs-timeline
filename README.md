@@ -5,7 +5,10 @@ React component for the vis.js timeline module.
 
 [vis.js Timeline Documentation](http://visjs.org/docs/timeline)
 
+## Installation
+
 ```
+npm install --save vis
 npm install --save react-visjs-timeline
 ```
 
