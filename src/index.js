@@ -25,22 +25,22 @@ const events = [
   'mouseOver',
   'mouseMove',
   'itemover',
-  'itemout'
+  'itemout',
 ]
 
 const eventPropTypes = {}
 const eventDefaultProps = {}
 
 each(events, event => {
-  eventPropTypes[event] = PropTypes.func,
-  eventDefaultProps[`${event}Handler`] = noop
+  ;(eventPropTypes[event] = PropTypes.func),
+    (eventDefaultProps[`${event}Handler`] = noop)
 })
 
 export default class Timeline extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      customTimes: []
+      customTimes: [],
     }
   }
 
@@ -65,13 +65,7 @@ export default class Timeline extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const {
-      items,
-      groups,
-      options,
-      selection,
-      customTimes
-    } = this.props
+    const { items, groups, options, selection, customTimes } = this.props
 
     const itemsChange = items !== nextProps.items
     const groupsChange = groups !== nextProps.groups
@@ -79,11 +73,13 @@ export default class Timeline extends Component {
     const customTimesChange = customTimes !== nextProps.customTimes
     const selectionChange = selection !== nextProps.selection
 
-    return itemsChange ||
+    return (
+      itemsChange ||
       groupsChange ||
       optionsChange ||
       customTimesChange ||
       selectionChange
+    )
   }
 
   init() {
@@ -95,7 +91,7 @@ export default class Timeline extends Component {
       selectionOptions = {},
       customTimes,
       animate = true,
-      currentTime
+      currentTime,
     } = this.props
 
     let timelineOptions = options
@@ -106,7 +102,7 @@ export default class Timeline extends Component {
       timelineOptions = omit(options, 'start', 'end')
 
       this.$el.setWindow(options.start, options.end, {
-        animation: animate
+        animation: animate,
       })
     }
 
@@ -128,9 +124,18 @@ export default class Timeline extends Component {
     // diff the custom times to decipher new, removing, updating
     const customTimeKeysPrev = keys(this.state.customTimes)
     const customTimeKeysNew = keys(customTimes)
-    const customTimeKeysToAdd = difference(customTimeKeysNew, customTimeKeysPrev)
-    const customTimeKeysToRemove = difference(customTimeKeysPrev, customTimeKeysNew)
-    const customTimeKeysToUpdate = intersection(customTimeKeysPrev, customTimeKeysNew)
+    const customTimeKeysToAdd = difference(
+      customTimeKeysNew,
+      customTimeKeysPrev
+    )
+    const customTimeKeysToRemove = difference(
+      customTimeKeysPrev,
+      customTimeKeysNew
+    )
+    const customTimeKeysToUpdate = intersection(
+      customTimeKeysPrev,
+      customTimeKeysNew
+    )
 
     // NOTE this has to be in arrow function so context of `this` is based on
     // this.$el and not `each`
@@ -149,34 +154,37 @@ export default class Timeline extends Component {
   }
 
   render() {
-    return <div ref='container' />
+    return <div ref="container" />
   }
 }
 
-Timeline.propTypes = assign({
-  items: PropTypes.array,
-  groups: PropTypes.array,
-  options: PropTypes.object,
-  selection: PropTypes.array,
-  customTimes: PropTypes.shape({
-    datetime: PropTypes.instanceOf(Date),
-    id: PropTypes.string
-  }),
-  animate: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object,
-  ]),
-  currentTime: PropTypes.oneOfType([
+Timeline.propTypes = assign(
+  {
+    items: PropTypes.array,
+    groups: PropTypes.array,
+    options: PropTypes.object,
+    selection: PropTypes.array,
+    customTimes: PropTypes.shape({
+      datetime: PropTypes.instanceOf(Date),
+      id: PropTypes.string,
+    }),
+    animate: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+    currentTime: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(Date),
-      PropTypes.number
-  ])
-}, eventPropTypes)
+      PropTypes.number,
+    ]),
+  },
+  eventPropTypes
+)
 
-Timeline.defaultProps = assign({
-  items: [],
-  groups: [],
-  options: {},
-  selection: [],
-  customTimes: {},
-}, eventDefaultProps)
+Timeline.defaultProps = assign(
+  {
+    items: [],
+    groups: [],
+    options: {},
+    selection: [],
+    customTimes: {},
+  },
+  eventDefaultProps
+)
