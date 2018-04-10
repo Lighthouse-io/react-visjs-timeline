@@ -9,12 +9,12 @@ const basicExample = {
     end: '2014-04-30',
   },
   items: [
-    {id: 1, content: 'item 1', start: '2014-04-20'},
-    {id: 2, content: 'item 2', start: '2014-04-14'},
-    {id: 3, content: 'item 3', start: '2014-04-18'},
-    {id: 4, content: 'item 4', start: '2014-04-16', end: '2014-04-19'},
-    {id: 5, content: 'item 5', start: '2014-04-25'},
-    {id: 6, content: 'item 6', start: '2014-04-27', type: 'point'}
+    { id: 1, content: 'item 1', start: '2014-04-20' },
+    { id: 2, content: 'item 2', start: '2014-04-14' },
+    { id: 3, content: 'item 3', start: '2014-04-18' },
+    { id: 4, content: 'item 4', start: '2014-04-16', end: '2014-04-19' },
+    { id: 5, content: 'item 5', start: '2014-04-25' },
+    { id: 6, content: 'item 6', start: '2014-04-27', type: 'point' },
   ],
 }
 
@@ -22,11 +22,14 @@ const groupsExample = {
   groups: [],
   items: [],
   options: {
-    groupOrder: 'content'  // groupOrder can be a property name or a sorting function
+    groupOrder: 'content', // groupOrder can be a property name or a sorting function
   },
 }
 
-const now = moment().minutes(0).seconds(0).milliseconds(0)
+const now = moment()
+  .minutes(0)
+  .seconds(0)
+  .milliseconds(0)
 const groupCount = 3
 const itemCount = 20
 
@@ -43,10 +46,14 @@ for (let i = 0; i < itemCount; i++) {
   groupsExample.items.push({
     id: i,
     group: group,
-    content: 'item ' + i +
-      ' <span style="color:#97B0F8">(' + names[group] + ')</span>',
+    content:
+      'item ' +
+      i +
+      ' <span style="color:#97B0F8">(' +
+      names[group] +
+      ')</span>',
     start: start,
-    type: 'box'
+    type: 'box',
   })
 }
 
@@ -55,20 +62,23 @@ class App extends Component {
     super(props)
 
     this.state = {
-      selectedIds: []
+      selectedIds: [],
     }
   }
 
   render() {
     return (
       <div className="App">
-        <p className="header">A basic timeline. You can move and zoom the timeline, and select items.</p>
-        <Timeline
-          {...basicExample}
-        />
-        <p className="header">This example demonstrate using groups. Note that a DataSet is used for both
-          items and groups, allowing to dynamically add, update or remove both items
-          and groups via the DataSet.</p>
+        <p className="header">
+          A basic timeline. You can move and zoom the timeline, and select
+          items.
+        </p>
+        <Timeline {...basicExample} />
+        <p className="header">
+          This example demonstrate using groups. Note that a DataSet is used for
+          both items and groups, allowing to dynamically add, update or remove
+          both items and groups via the DataSet.
+        </p>
         <Timeline
           {...groupsExample}
           clickHandler={this.clickHandler.bind(this)}
@@ -80,9 +90,11 @@ class App extends Component {
 
   clickHandler(props) {
     const { group } = props
-    const selectedIds = groupsExample.items.filter(item => item.group === group).map(item => item.id)
+    const selectedIds = groupsExample.items
+      .filter(item => item.group === group)
+      .map(item => item.id)
     this.setState({
-      selectedIds
+      selectedIds,
     })
   }
 }
