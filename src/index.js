@@ -82,10 +82,11 @@ export default class Timeline extends Component {
 
     // if the window changed, handle this manually. Helps avoid flickering by
     // unnecessary renders.
-    let oldStart = options.start
-    let oldEnd = options.end
-    let newStart = nextProps.options.start
-    let newEnd = nextProps.options.end
+    const oldStart = options.start
+    const oldEnd = options.end
+    const newStart = nextProps.options.start
+    const newEnd = nextProps.options.end
+
     if (oldStart != newStart || oldEnd != newEnd) {
       this.updateWindow(newStart, newEnd)
     }
@@ -98,10 +99,6 @@ export default class Timeline extends Component {
     )
 
     return groupsChange || optionsChange || customTimesChange
-  }
-
-  componentWillUnmount() {
-    this.$el.destroy()
   }
 
   optionsAreEqual(options1, options2) {
