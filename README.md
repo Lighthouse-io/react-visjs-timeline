@@ -139,3 +139,18 @@ Import your custom CSS *after* you import the component from the module, e.g:
 import Timeline from 'react-visjs-timeline'
 import './my-custom-css.css' // in conjunction with webpack's style-loader
 ```
+
+## Timeline Object
+
+You can retrieve a reference to the vis.js timeline object using the prop `timelineRef`. This prop accepts a function which will be called with the timeline object once it is created. This is useful for accessing functions such as the timeline zoom API.
+
+```
+<Timeline
+  options={options}
+  timelineRef={refHandler}
+/>
+
+function refHandler(timeline) {
+  // use timeline object
+}
+```
