@@ -53,9 +53,6 @@ export default class Timeline extends Component {
 
     this.$el = new vis.Timeline(container, undefined, this.props.options)
 
-    events.forEach(event => {
-      this.$el.on(event, this.props[`${event}Handler`])
-    })
 
     this.init()
   }
@@ -93,6 +90,10 @@ export default class Timeline extends Component {
       animate = true,
       currentTime,
     } = this.props
+
+    events.forEach(event => {
+      this.$el.on(event, this.props[`${event}Handler`])
+    })
 
     let timelineOptions = options
 
