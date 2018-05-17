@@ -42,6 +42,8 @@ export default class Timeline extends Component {
     this.state = {
       customTimes: [],
     }
+    this.oldHandlers = {}
+    console.log('Timeline constructor', props)
   }
 
   componentWillUnmount() {
@@ -52,7 +54,6 @@ export default class Timeline extends Component {
     const { container } = this.refs
 
     this.$el = new vis.Timeline(container, undefined, this.props.options)
-
 
     this.init()
   }
@@ -91,8 +92,20 @@ export default class Timeline extends Component {
       currentTime,
     } = this.props
 
+    // Remove any old handlers
+    each(this.oldHandlers, (event, handler) => this.$el.off(event, handler))
+
+    // Clear old handler map
+    this.oldHandlers = {}
+
+    // Install new handlers
     events.forEach(event => {
-      this.$el.on(event, this.props[`${event}Handler`])
+      const key = `${event}Handler`
+      const handler = this.props[key]
+      if (handler) {
+        this.$el.on(event, handler)
+        this.oldHandlers[key] = handler
+      }
     })
 
     let timelineOptions = options
