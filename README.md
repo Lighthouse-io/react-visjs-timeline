@@ -6,6 +6,8 @@ React component for the vis.js timeline module.
 [vis.js Timeline Documentation](http://visjs.org/docs/timeline)
 
 ## Installation
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FLighthouse-io%2Freact-visjs-timeline.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FLighthouse-io%2Freact-visjs-timeline?ref=badge_shield)
+
 
 ```
 npm install --save vis
@@ -139,3 +141,7 @@ Import your custom CSS *after* you import the component from the module, e.g:
 import Timeline from 'react-visjs-timeline'
 import './my-custom-css.css' // in conjunction with webpack's style-loader
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FLighthouse-io%2Freact-visjs-timeline.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FLighthouse-io%2Freact-visjs-timeline?ref=badge_large)
