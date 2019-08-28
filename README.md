@@ -3,7 +3,7 @@ React Vis.js Timeline
 
 React component for the vis.js timeline module.
 
-[vis.js Timeline Documentation](http://visjs.org/docs/timeline)
+[vis.js Timeline Documentation](https://visjs.github.io/vis-timeline/docs/timeline)
 
 ## Installation
 
@@ -19,7 +19,7 @@ npm install --save react-visjs-timeline
 ```
 import Timeline from 'react-visjs-timeline'
 
-// http://visjs.org/docs/timeline/#Configuration_Options
+// https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
 const options = {
   width: '100%',
   height: '60px',
@@ -54,7 +54,7 @@ Not all features from vis.js timeline are supported (Pull Requests are welcome).
 
 ## Items
 
-Items follow the exact same for format as they do in vis.js. See the [vis.js documentation](http://visjs.org/docs/timeline/#items) for more information.
+Items follow the exact same for format as they do in vis.js. See the [vis.js documentation](https://visjs.github.io/vis-timeline/docs/timeline/#items) for more information.
 
 ```
 const items = [{
@@ -71,7 +71,7 @@ const items = [{
 
 ## Groups
 
-Groups follow the exact same for format as they do in vis.js. See the [vis.js documentation](http://visjs.org/docs/timeline/#groups) for more information.
+Groups follow the exact same for format as they do in vis.js. See the [vis.js documentation](https://visjs.github.io/vis-timeline/docs/timeline/#groups) for more information.
 
 ```
 const groups = [{
@@ -100,7 +100,7 @@ When the `customTimes` prop changes, the updated times will be reflected in the 
 
 ## Events
 
-All events are supported via prop function handlers. The prop name follows the convention `<eventName>Handler` and the specified function will receive the same arguments as the [vis.js counterparts](http://visjs.org/docs/timeline/#Events).
+All events are supported via prop function handlers. The prop name follows the convention `<eventName>Handler` and the specified function will receive the same arguments as the [vis.js counterparts](https://visjs.github.io/vis-timeline/docs/timeline/#Events).
 Some visjs event names are not camelcased (e.g. `rangechange`), so the corresponding React prop names need to follow that convention where necessary:
 
 ```
