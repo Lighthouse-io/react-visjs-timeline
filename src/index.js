@@ -1,4 +1,4 @@
-import vis from 'timeline-plus/dist/timeline.min'
+import { Timeline, DataSet } from 'timeline-plus/dist/timeline.min'
 import 'timeline-plus/dist/timeline.min.css'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -36,7 +36,7 @@ each(events, event => {
     (eventDefaultProps[`${event}Handler`] = noop)
 })
 
-export default class Timeline extends Component {
+export default class ReactTimeline extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -51,7 +51,7 @@ export default class Timeline extends Component {
   componentDidMount() {
     const { container } = this.refs
 
-    this.$el = new vis.Timeline(container, undefined, this.props.options)
+    this.$el = new Timeline(container, undefined, this.props.options)
 
     events.forEach(event => {
       this.$el.on(event, this.props[`${event}Handler`])
@@ -85,7 +85,7 @@ export default class Timeline extends Component {
   init() {
     const {
       items,
-      groups,
+      groups = [],
       options,
       selection,
       selectionOptions = {},
@@ -109,7 +109,7 @@ export default class Timeline extends Component {
     this.$el.setOptions(timelineOptions)
 
     if (groups.length > 0) {
-      const groupsDataset = new vis.DataSet()
+      const groupsDataset = new DataSet()
       groupsDataset.add(groups)
       this.$el.setGroups(groupsDataset)
     }
