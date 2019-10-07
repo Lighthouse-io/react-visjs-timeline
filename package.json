@@ -1,7 +1,7 @@
 {
-  "name": "react-visjs-timeline",
-  "version": "1.5.0",
-  "description": "React component for the vis.js timeline module",
+  "name": "react-timeline-plus",
+  "version": "1.0.0",
+  "description": "React component for the yotamberk/timeline-plus timeline module",
   "main": "build/index.js",
   "scripts": {
     "format": "prettier --write ./{src,examples}/**/*.js",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lighthouse-io/react-visjs-timeline.git"
+    "url": "git+https://github.com/re3lex/react-timeline-plus.git"
   },
   "author": "willmcclellan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Lighthouse-io/react-visjs-timeline/issues"
+    "url": "https://github.com/re3lex/react-timeline-plus/issues"
   },
-  "homepage": "https://github.com/Lighthouse-io/react-visjs-timeline#readme",
+  "homepage": "https://github.com/re3lex/react-timeline-plus#readme",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
@@ -43,6 +43,6 @@
     "prop-types": "^15.0 || ^16.0",
     "react": "^0.14 || ^15.0 || ^16.0",
     "react-dom": "^0.14 || ^15.0 || ^16.0",
-    "vis": "^4.20.1"
+    "timeline-plus": "^2.4.0"
   }
 }

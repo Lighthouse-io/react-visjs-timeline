@@ -7,8 +7,8 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-visjs-timeline": "1.5.0",
-    "vis": "^4.20.1"
+    "re3lex/react-timeline-plus": "1.0.0",
+    "timeline-plus": "^2.40.0"
   },
   "devDependencies": {
     "react-scripts": "^1.0.10"
