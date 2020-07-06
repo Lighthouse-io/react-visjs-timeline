@@ -26,6 +26,8 @@ const events = [
   'mouseMove',
   'itemover',
   'itemout',
+  'mouseDown', 
+  'mouseUp'
 ]
 
 const eventPropTypes = {}
