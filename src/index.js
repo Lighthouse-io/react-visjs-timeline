@@ -57,6 +57,10 @@ export default class Timeline extends Component {
       this.$el.on(event, this.props[`${event}Handler`])
     })
 
+    if (this.props.timelineRef) {
+      this.props.timelineRef(this.$el)
+    }
+
     this.init()
   }
 
@@ -160,6 +164,7 @@ export default class Timeline extends Component {
 
 Timeline.propTypes = assign(
   {
+    timelineRef: PropTypes.func,
     items: PropTypes.array,
     groups: PropTypes.array,
     options: PropTypes.object,
