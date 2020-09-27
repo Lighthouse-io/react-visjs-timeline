@@ -149,6 +149,10 @@ export default class Timeline extends Component {
       this.$el.setCustomTime(datetime, id)
     })
 
+    this.$el.fit({
+      animation: animate
+    })
+
     // store new customTimes in state for future diff
     this.setState({ customTimes })
   }
