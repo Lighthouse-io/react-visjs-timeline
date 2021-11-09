@@ -154,7 +154,7 @@ export default class Timeline extends Component {
   }
 
   render() {
-    return <div ref="container" />
+    return <div ref="container" style={{ height: '100%' }} />
   }
 }
 
