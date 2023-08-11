@@ -67,11 +67,11 @@ export default class Timeline extends Component {
   shouldComponentUpdate(nextProps) {
     const { items, groups, options, selection, customTimes } = this.props
 
-    const itemsChange = items !== nextProps.items
-    const groupsChange = groups !== nextProps.groups
-    const optionsChange = options !== nextProps.options
-    const customTimesChange = customTimes !== nextProps.customTimes
-    const selectionChange = selection !== nextProps.selection
+    const itemsChange = JSON.stringify(items) !== JSON.stringify(nextProps.items)
+    const groupsChange = JSON.stringify(groups) !== JSON.stringify(nextProps.groups)
+    const optionsChange = JSON.stringify(options) !== JSON.stringify(nextProps.options)
+    const customTimesChange = JSON.stringify(customTimes) !== JSON.stringify(nextProps.customTimes)
+    const selectionChange = JSON.stringify(selection) !== JSON.stringify(nextProps.selection)
 
     return (
       itemsChange ||
